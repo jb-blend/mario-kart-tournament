@@ -15,8 +15,8 @@ PLAYERS_SHEET = "players"
 
 PLAYER_PIC_DIR = Path("player_pics")
 CHARACTER_PIC_DIR = Path("character_pics")
-BACKGROUND_IMG = Path("assets/mario_bg.jpg")       # you choose
-MARIO_FONT = Path("assets/MarioFont.ttf")          # optional; you supply
+BACKGROUND_IMG = Path("assets/mario_bg.jpg")       
+MARIO_FONT = Path("assets/MarioFont.ttf")          
 
 AUTOREFRESH_SECONDS = 5
 
@@ -678,4 +678,5 @@ if page == "Service line stats":
             st.line_chart(df_pivot, height=400, use_container_width=True)
         else:
             st.info("No 'date' column found in the data — add it to plot cumulative entries over time.")
+
 
