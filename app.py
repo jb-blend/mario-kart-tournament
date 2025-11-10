@@ -593,11 +593,59 @@ if page == "Service line stats":
         #     )
 
             # Little leaderboard-style printout
-        st.markdown("#### Leaderboard by service line")
+        # 🟨 Mario-style section title
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ff0000cc, #ffcc00cc);
+            border: 3px solid #fff200;
+            box-shadow: 0 0 12px #ff0000, 0 0 20px #00ffff, 0 0 30px #ffcc00;
+            color: #fff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 1rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            text-align: center;
+            text-shadow: 2px 2px 0 #000, -2px -2px 0 #000;
+            letter-spacing: 0.05em;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        ">
+            ⭐ Leaderboard by Service Line ⭐
+        </div>
+        """, unsafe_allow_html=True)
+
+        # 🧱 Mario-style glowing boxes (no ranks)
+        colors = [
+            ("#FFD700", "#fff8e1"),  # gold
+            ("#C0C0C0", "#f0f0f0"),  # silver
+            ("#CD7F32", "#ffe0b2"),  # bronze
+        ]
+
+        # Cycle through defined colors and fall back to red if >3
         for i, row in avg_times.iterrows():
-            st.markdown(
-                f"- **#{i+1} {row['service_line']}** – {row['avg_time_str']}"
-            )
+            main_col, light_col = colors[i] if i < 3 else ("#ff4b4b", "#ffe5e5")
+            
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(135deg, {main_col}, {light_col});
+                border: 3px solid #fff;
+                box-shadow: 0 0 10px {main_col}, 0 0 20px {light_col}, 0 0 30px #ffffff88;
+                color: #000;
+                padding: 0.8rem 1.2rem;
+                border-radius: 1rem;
+                font-family: 'Press Start 2P', cursive;
+                font-size: 0.7rem;
+                text-align: center;
+                text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 0 0 6px #00000055;
+                letter-spacing: 0.04em;
+                margin: 0.5rem 0;
+            ">
+                <b>{row['service_line']}</b><br>
+                <span style="color:#000; font-size:0.75rem;">⏱ {row['avg_time_str']}</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+
 
         # ---- Cumulative entries over time ----
         if "date" in long_df.columns:
