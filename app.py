@@ -15,8 +15,8 @@ PLAYERS_SHEET = "players"
 
 PLAYER_PIC_DIR = Path("player_pics")
 CHARACTER_PIC_DIR = Path("character_pics")
-BACKGROUND_IMG = Path("assets/mario_bg.jpg")       
-MARIO_FONT = Path("assets/MarioFont.ttf")          
+BACKGROUND_IMG = Path("assets/mario_bg.jpg")       # you choose
+MARIO_FONT = Path("assets/MarioFont.ttf")          # optional; you supply
 
 AUTOREFRESH_SECONDS = 5
 
@@ -40,11 +40,42 @@ for img_path in CHARACTER_PIC_DIR.glob("*.png"):
         print(img_path.name, "→ not transparent")
 
 # ---------- PAGE SETUP ----------
+# Must come BEFORE any Streamlit elements render
 st.set_page_config(
     page_title="Mario Kart Tournament Leaderboard",
     layout="wide",
     page_icon="🏎️",
+    initial_sidebar_state="expanded",
 )
+
+st.markdown("""
+<style>
+/* Fix broken Material icon text that leaks as 'keyboard_double_arrow_left/right' */
+
+/* Target the specific span used for the icon */
+span[data-testid="stIconMaterial"] {
+    font-family: 'Material Symbols Outlined' !important;
+    font-feature-settings: 'liga';
+}
+
+/* If the Material font still fails, hide the raw fallback text */
+span[data-testid="stIconMaterial"]:not(:has(svg)) {
+    font-family: 'Material Symbols Outlined', sans-serif !important;
+    color: transparent !important;
+}
+
+/* Optionally, replace with your own small MENU text */
+span[data-testid="stIconMaterial"]:not(:has(svg))::before {
+    content: "MENU";
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: 0.6rem;
+    color: #ffcc00;
+    text-shadow: 1px 1px 0 #000;
+    position: relative;
+    top: 1px;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # 🎨 Apply Mario-style Google Font (Press Start 2P)
 # 🎨 Apply Mario-style Google Font via @import
@@ -599,5 +630,4 @@ if page == "Service line stats":
             st.line_chart(df_pivot, height=400, use_container_width=True)
         else:
             st.info("No 'date' column found in the data — add it to plot cumulative entries over time.")
-
 
