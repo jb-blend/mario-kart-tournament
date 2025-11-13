@@ -15,8 +15,8 @@ PLAYERS_SHEET = "players"
 
 PLAYER_PIC_DIR = Path("player_pics")
 CHARACTER_PIC_DIR = Path("character_pics")
-BACKGROUND_IMG = Path("assets/mario_bg.jpg")       
-MARIO_FONT = Path("assets/MarioFont.ttf")          
+BACKGROUND_IMG = Path("assets/mario_bg.jpg")       # you choose
+MARIO_FONT = Path("assets/MarioFont.ttf")          # optional; you supply
 
 AUTOREFRESH_SECONDS = 5
 
@@ -351,8 +351,10 @@ def get_character_image(character):
     name = str(character).strip().lower().replace(" ", "_")
     path = CHARACTER_PIC_DIR / f"{name}.png"
     if not path.exists():
+        st.warning(f"⚠️ Missing character image: {path}")
+        print("⚠️ Missing character image:", path)
         return None
-    img = Image.open(path).convert("RGBA")  # 🔹 Keep transparency
+    img = Image.open(path).convert("RGBA")
     img = img.resize((80, 80), Image.LANCZOS)
     return img
 
@@ -678,5 +680,4 @@ if page == "Service line stats":
             st.line_chart(df_pivot, height=400, use_container_width=True)
         else:
             st.info("No 'date' column found in the data — add it to plot cumulative entries over time.")
-
 
