@@ -340,8 +340,15 @@ def load_image_safe(path: Path, size=None):
 def get_player_image(filename):
     if pd.isna(filename):
         return None
+
     path = PLAYER_PIC_DIR / str(filename)
-    # Taller rectangle for passport-photo look
+    print("📄 Looking for:", path)   # DEBUG LINE
+
+    if not path.exists():
+        print("❌ File not found on disk!", path)
+        print("📁 Available files:", list(PLAYER_PIC_DIR.glob("*")))
+        return None
+
     return load_image_safe(path, size=(70, 100))
 
 
@@ -692,6 +699,7 @@ if page == "Service line stats":
 
         else:
             st.info("No 'date' column found in the data — add it to plot cumulative entries over time.")
+
 
 
 
