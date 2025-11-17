@@ -24,7 +24,7 @@ CHARACTER_COLORS = {
     "mario": "#ff4b4b",
     "luigi": "#4caf50",
     "peach": "#ffb6c1",
-    "toad": "#f5e050",
+    "toad": "#f55050",
     "yoshi": "#7ed957",
     "bowser": "#ff9f00",
     "donkey kong": "#a56b46",
@@ -692,6 +692,7 @@ if page == "Service line stats":
 
         else:
             st.info("No 'date' column found in the data — add it to plot cumulative entries over time.")
+
 
 
 
