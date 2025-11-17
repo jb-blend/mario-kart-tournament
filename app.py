@@ -653,10 +653,12 @@ if page == "Service line stats":
         if "date" in long_df.columns:
             st.markdown("### 📈 Cumulative Entries Over Time")
 
-            # Parse the date column safely (supports dd/mm/yyyy)
-            long_df["date"] = pd.to_datetime(long_df["date"], errors="coerce", dayfirst=True)
+            # Parse safely (dd/mm/yyyy) and strip time-of-day
+            long_df["date"] = pd.to_datetime(
+                long_df["date"], errors="coerce", dayfirst=True
+            ).dt.date
 
-            # Drop missing and group
+            # Drop missing and group by day + service line
             df_time = (
                 long_df.dropna(subset=["date", "service_line"])
                 .groupby(["date", "service_line"])
@@ -672,12 +674,24 @@ if page == "Service line stats":
 
             # Pivot for plotting
             df_pivot = (
-                df_time.pivot(index="date", columns="service_line", values="cumulative_entries")
+                df_time.pivot(
+                    index="date", 
+                    columns="service_line", 
+                    values="cumulative_entries"
+                )
                 .fillna(method="ffill")
             )
 
-            # Plot it
+            # Force integer values (removes decimals on y-axis)
+            df_pivot = df_pivot.astype(int)
+
+            # Force plain string x-axis so Streamlit doesn't show time
+            df_pivot.index = df_pivot.index.astype(str)
+
             st.line_chart(df_pivot, height=400, use_container_width=True)
+
         else:
             st.info("No 'date' column found in the data — add it to plot cumulative entries over time.")
+
+
 
