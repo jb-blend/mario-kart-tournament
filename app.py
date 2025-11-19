@@ -690,7 +690,7 @@ if page == "Service line stats":
             )
 
             # Force integer values (removes decimals on y-axis)
-            df_pivot = df_pivot.astype(int)
+            df_pivot = df_pivot.fillna(method="ffill").fillna(0).astype(int)
 
             # Force plain string x-axis so Streamlit doesn't show time
             df_pivot.index = df_pivot.index.astype(str)
@@ -699,6 +699,7 @@ if page == "Service line stats":
 
         else:
             st.info("No 'date' column found in the data — add it to plot cumulative entries over time.")
+
 
 
 
