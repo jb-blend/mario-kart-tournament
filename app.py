@@ -409,7 +409,25 @@ if page == "Leaderboard":
         st.info("No results yet – add rows to the Excel file to get started.")
     else:
         # Sort by time ascending (fastest at top)
-        results_sorted = results_df.sort_values("time_seconds", ascending=True).reset_index(drop=True)
+        # === LEADERBOARD DEDUPLICATION: fastest entry per pair ONLY ===
+
+        def canonical_pair(a, b):
+            """Sort names so (A,B) and (B,A) are the same."""
+            return tuple(sorted([str(a).strip(), str(b).strip()]))
+
+        # Create a canonical pair key
+        results_df["pair_key"] = results_df.apply(
+            lambda r: canonical_pair(r["p1"], r["p2"]), axis=1
+        )
+
+        # Sort by fastest first
+        leaderboard_df = results_df.sort_values("time_seconds", ascending=True)
+
+        # Drop duplicates: keep only the fastest entry per pair
+        leaderboard_df = leaderboard_df.drop_duplicates(subset=["pair_key"], keep="first")
+
+        # Reset index for clean iteration
+        results_sorted = leaderboard_df.reset_index(drop=True)
 
         # Determine which entries are new
         current_keys = []
@@ -699,9 +717,3 @@ if page == "Service line stats":
 
         else:
             st.info("No 'date' column found in the data — add it to plot cumulative entries over time.")
-
-
-
-
-
-
